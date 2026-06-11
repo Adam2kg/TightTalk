@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Required: ctranslate2 allocates JIT executable pages for kernel dispatch.
+         Without this, the app crashes silently on first inference under Hardened Runtime. -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+
+    <!-- Required: bundled dylibs (ctranslate2, onnxruntime) are not Apple-signed.
+         Disabling library validation allows them to load. -->
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+
+    <!-- Required on macOS 12+ for any app that accesses audio input.
+         TightTalk transcribes audio files, not live mic input, but the OS
+         may still prompt — include to avoid silent denial. -->
+    <key>com.apple.security.device.microphone</key>
+    <true/>
+</dict>
+</plist>

@@ -1,0 +1,25 @@
+# Build artifacts
+build/
+dist/
+*.pyc
+__pycache__/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Output
+output/
+
+# Bundled binaries (large, download via build_app.sh)
+bin/
+
+# Dev launcher (AppleScript app)
+TightTalk Dev.app/
+
+# PyInstaller working files
+*.manifest
+*.spec.bak
