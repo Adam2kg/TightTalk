@@ -2,3 +2,4 @@ faster-whisper
 pydub
 numpy
 scipy
+sounddevice
