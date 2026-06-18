@@ -131,9 +131,15 @@ def _prosodic_islands(
     sensitivity: float,
 ) -> list:
     """
-    Mark words that are prosodic islands: high amplitude or preceded by a
-    longer-than-average pause in the original recording.
+    Mark words that are prosodic islands: emphasised (high-amplitude) words.
     These are protected from gap compression.
+
+    Emphasis is measured by amplitude only. A long pause *before* a word is
+    silence we want to compress, not emphasis — including it here was circular
+    (a long gap flagged the next word as an island, which then protected that
+    very gap), so 18/37 gaps self-protected and the sensitivity slider was
+    inert. Amplitude-only protection routes long pauses into the mapping and
+    restores the slider's effect.
     """
     amps = []
     for start, end, _ in words:
@@ -143,12 +149,7 @@ def _prosodic_islands(
     mean_a, std_a = float(np.mean(amps)), float(np.std(amps))
     threshold = mean_a + sensitivity * std_a
 
-    islands = []
-    for i, (start, _, _) in enumerate(words):
-        high_amp   = amps[i] > threshold
-        long_pause = (i > 0) and (start - words[i - 1][1] > 0.35)
-        islands.append(high_amp or long_pause)
-    return islands
+    return [a > threshold for a in amps]
 
 
 # ── Core processing ────────────────────────────────────────────────────────────
