@@ -185,7 +185,6 @@ class EditEngine:
         e = self.redo_stack.pop()
         s0 = e["pos"]
         s1 = s0 + len(e["removed"])
-        n = len(self.samples)
         left  = self.samples[:s0].copy()
         right = self.samples[s1:].copy()
         fade = e["fade"]

@@ -1,0 +1,33 @@
+# errwatch config — TightTalk (python)
+# Watches the source tree, runs ruff lint + compile checks, exports findings.
+
+[watch]
+paths = ["tighttalk", "hooks"]
+ignore = [
+    ".git", "__pycache__", "*.pyc", ".venv", "build", "dist",
+    "output", "input", ".octo", ".errwatch",
+]
+debounce_ms = 500
+
+[notify]
+bell = true
+title = true
+notification = false
+
+[export]
+auto = true
+
+[jobs.lint]
+command = ["ruff", "check", "--output-format", "json", "tighttalk", "hooks"]
+analyzer = "json"
+file_key = "filename"
+line_key = "location.row"
+column_key = "location.column"
+message_key = "message"
+default = true
+key = "l"
+
+[jobs.compile]
+command = ["python", "-c", "import compileall, sys; ok = all(compileall.compile_file(f, quiet=1) for f in ['tighttalk/tight_talk.py','tighttalk/player.py','tighttalk/editor.py','tighttalk/config.py']); sys.exit(0 if ok else 1)"]
+analyzer = "exit_code"
+key = "c"

@@ -241,7 +241,6 @@ def _snap_joint_ms(
     if hi <= lo:
         return nominal_new_ms
     frame = max(1, int(0.010 * sr))
-    s0 = int(lo * sr / 1000)
     best_ms, best_rms = nominal_joint, float("inf")
     for j_ms in range(lo, hi + 1, 5):
         s = int(j_ms * sr / 1000)
@@ -503,7 +502,7 @@ def process(
                 "== GAP DISTRIBUTION ==",
                 f"population: {len(mapped)} mapped / {n_below} below-thresh / "
                 f"{n_protected} protected / {n_breath} breath",
-                f"            before      after       ratio",
+                "            before      after       ratio",
                 f"P10    {p_before[0]:>8.0f}ms  {p_after[0]:>8.0f}ms  {p_after[0]/max(p_before[0],1):>6.2f}",
                 f"P50    {p_before[1]:>8.0f}ms  {p_after[1]:>8.0f}ms  {p_after[1]/max(p_before[1],1):>6.2f}",
                 f"P90    {p_before[2]:>8.0f}ms  {p_after[2]:>8.0f}ms  {p_after[2]/max(p_before[2],1):>6.2f}",

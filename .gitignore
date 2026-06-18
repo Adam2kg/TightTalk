@@ -14,6 +14,12 @@ __pycache__/
 # Output
 output/
 
+# Personal input recordings
+input/
+
+# errwatch generated findings
+.errwatch/
+
 # Bundled binaries (large, download via build_app.sh)
 bin/
 
