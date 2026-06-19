@@ -84,6 +84,8 @@ echo "     (installing into Python 3.11 user site — ~2 min on first run)"
     "pydub==0.25.1" \
     "scipy==1.13.1" \
     "numpy==1.26.4" \
+    "sounddevice==0.4.7" \
+    "cffi==1.17.1" \
     "pyinstaller==6.11.1" \
     "pyinstaller-hooks-contrib==2024.11"
 

@@ -16,6 +16,14 @@ import sys
 import subprocess
 from pathlib import Path
 
+from PyInstaller.utils.hooks import collect_data_files, collect_dynamic_libs
+
+# ── sounddevice: bundle the PortAudio dylib it ships in _sounddevice_data ──────
+# sounddevice loads libportaudio via cffi at runtime; without these the new
+# in-app player/editor silently disable (SOUNDDEVICE_OK = False).
+_sd_datas = collect_data_files("_sounddevice_data")
+_sd_binaries = collect_dynamic_libs("_sounddevice_data") + collect_dynamic_libs("sounddevice")
+
 # ── Resolve site-packages of the CURRENT Python (the build venv) ──────────────
 _site_packages = subprocess.check_output(
     [sys.executable, "-c", "import site; print(site.getsitepackages()[0])"],
@@ -71,6 +79,7 @@ a = Analysis(
     binaries=[
         *_ct2_binaries,
         *_ort_binaries,
+        *_sd_binaries,
     ],
     datas=[
         # ctranslate2 Python package (includes kernel configs)
@@ -85,6 +94,8 @@ a = Analysis(
         # ffmpeg — must be in datas so it lands under sys._MEIPASS (Contents/MacOS/)
         # (binaries go to Contents/Frameworks/ which is outside MEIPASS)
         *_ffmpeg_datas,
+        # sounddevice's bundled PortAudio dylib + metadata
+        *_sd_datas,
     ],
     hiddenimports=[
         # ── ctranslate2
@@ -129,6 +140,15 @@ a = Analysis(
         "pydub.utils",
         "pydub.effects",
         "pydub.silence",
+        # ── sounddevice (in-app playback + waveform editor)
+        "sounddevice",
+        "_sounddevice",
+        "_sounddevice_data",
+        "cffi",
+        "_cffi_backend",
+        # ── TightTalk local modules (imported via guarded try/except)
+        "player",
+        "editor",
         # ── tkinter
         "tkinter",
         "tkinter.ttk",
