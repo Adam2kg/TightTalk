@@ -280,7 +280,7 @@ def process(
         segs, info = model.transcribe(
             input_path,
             word_timestamps=True,
-            language="pt",
+            language=None,        # auto-detect (Whisper base supports 100 languages)
             beam_size=1,
             vad_filter=True,
             condition_on_previous_text=False,
